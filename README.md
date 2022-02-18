@@ -20,7 +20,7 @@ It computes a function for n input dimensions. The input space is divided up int
 
 3) Now we need to map the input 70 points to association space and multiply these elements with the weights and sum them to get the output:
 
-![eq](git_images/eq.PNG)
+                            ![eq](git_images/eq.PNG)
 
 4) To find the size of association vector that are mapped to the Association Matrix we use below formula:
   Association Vector Size = Num of weights – Generalization Factor + 1
@@ -28,10 +28,15 @@ It computes a function for n input dimensions. The input space is divided up int
 5) We will be hashing contiguous regions (sliding window) to avoid storing random weight indices, therefore we will design the hash function proportionately and will store the start index of the weight vector in the Association Map. This will help us ascertain the active weights for each association element.
 
 6) During training for each input, we will perform following steps:
-  a. Get the active weights for that input.
-  b. Sum the weights values (similar to multiply that input by 1 for the active weights and 0 for inactive weights and summing all values).
-  c. Then we find the difference between the predicted value and actual value.
-  d. Further, we use this difference to update the active weights using below formula:
+    a. Get the active weights for that input.
+  
+    b. Sum the weights values (similar to multiply that input by 1 for the active weights and 0 for inactive weights and summing all values).
+    
+    c. Then we find the difference between the predicted value and actual value.
+    
+    d. Further, we use this difference to update the active weights using below formula:
+        
+        
         ```
         𝑤𝑡+1 = 𝑤𝑡 + (𝑒 ∗ α)/𝑔𝑓   
         
@@ -45,7 +50,8 @@ It computes a function for n input dimensions. The input space is divided up int
           
         ```
         
-  e. This process is repeated until a predefined convergence threshold.
+        
+    e. This process is repeated until a predefined convergence threshold.
   
 7) We use the trained network to predict the values of the test data (30 points) and find 
 their accuracy. Finally, we plot them to visualize the results.
