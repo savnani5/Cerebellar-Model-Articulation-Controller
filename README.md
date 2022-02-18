@@ -2,7 +2,7 @@
 ---
 ## Overview
 
-The CMAC was first proposed as a function modeler for robotic controllers by James Albus in 1975[1] (hence the name), but has been extensively used in reinforcement learning and also as for automated classification in the machine learning community. The CMAC is an extension of the perceptron model. 
+The CMAC was first proposed as a function modeler for robotic controllers by James Albus in 1975, but has been extensively used in reinforcement learning and also as for automated classification in the machine learning community. The CMAC is an extension of the perceptron model. 
 
 It computes a function for n input dimensions. The input space is divided up into hyper-rectangles, each of which is associated with a memory cell. The contents of the memory cells are the weights, which are adjusted during training. Usually, more than one quantisation of input space is used, so that any point in input space is associated with a number of hyper-rectangles, and therefore with a number of memory cells. The output of a CMAC is the algebraic sum of the weights in all the memory cells activated by the input point.
 
