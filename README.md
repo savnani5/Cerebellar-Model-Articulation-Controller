@@ -39,6 +39,7 @@ It computes a function for n input dimensions. The input space is divided up int
         
         ```
           𝑤𝑡+1 = 𝑤𝑡 + (𝑒 ∗ α)/𝑔𝑓   
+        ```
         
           where,
             𝑤𝑡+1 is weight at iteration t+1
@@ -46,8 +47,6 @@ It computes a function for n input dimensions. The input space is divided up int
             e is error
             α is learning rate
             gf = generalization factor
-        ```
-        
         
     e. This process is repeated until a predefined convergence threshold.
   
