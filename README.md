@@ -20,7 +20,7 @@ It computes a function for n input dimensions. The input space is divided up int
 
 3) Now we need to map the input 70 points to association space and multiply these elements with the weights and sum them to get the output:
 
-                            ![eq](git_images/eq.PNG)
+      ![eq](git_images/eq.PNG?style=centerme)
 
 4) To find the size of association vector that are mapped to the Association Matrix we use below formula:
   Association Vector Size = Num of weights – Generalization Factor + 1
@@ -38,16 +38,14 @@ It computes a function for n input dimensions. The input space is divided up int
         
         
         ```
-        𝑤𝑡+1 = 𝑤𝑡 + (𝑒 ∗ α)/𝑔𝑓   
+          𝑤𝑡+1 = 𝑤𝑡 + (𝑒 ∗ α)/𝑔𝑓   
         
-        where,
-          𝑤𝑡+1 is weight at iteration t+1
-          𝑤𝑡
-          is weight at iteration
-          e is error
-          α is learning rate
-          gf = generalization factor
-          
+          where,
+            𝑤𝑡+1 is weight at iteration t+1
+            𝑤𝑡 is weight at iteration t
+            e is error
+            α is learning rate
+            gf = generalization factor
         ```
         
         
