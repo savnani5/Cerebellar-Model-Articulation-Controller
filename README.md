@@ -1,4 +1,9 @@
 # Cerebellar-Model-Articulation-Controller
+
+[![Build Status](https://travis-ci.com/savnani5/Cerebellar-Model-Articulation-Controller.svg?branch=main)](https://travis-ci.com/github/savnani5/Cerebellar-Model-Articulation-Controller)
+[![Coverage Status](https://coveralls.io/repos/github/savnani5/Cerebellar-Model-Articulation-Controller/badge.svg?branch=main)](https://coveralls.io/github/savnani5/Cerebellar-Model-Articulation-Controller?branch=main)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
 ---
 ## Overview
 
