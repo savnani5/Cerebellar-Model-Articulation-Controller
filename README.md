@@ -36,10 +36,7 @@ It computes a function for n input dimensions. The input space is divided up int
     
     d. Further, we use this difference to update the active weights using below formula:
         
-        
-        ```
-          𝑤𝑡+1 = 𝑤𝑡 + (𝑒 ∗ α)/𝑔𝑓   
-        ```
+          𝑤𝑡+1 = 𝑤𝑡 + (𝑒 ∗ α)/𝑔𝑓  
         
           where,
             𝑤𝑡+1 is weight at iteration t+1
