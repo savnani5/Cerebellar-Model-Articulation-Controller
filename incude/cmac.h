@@ -1,3 +1,24 @@
+/**
+ * Copyright (c) 2022 Paras Savnani (savnani5@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #pragma once
 
 #include <iostream>
@@ -9,7 +30,10 @@
 #include <unordered_map>
 # define PI 3.141592  // pi 
 
-// Cerebellar Motor Articulation Controller (CMAC)
+/**
+ * @brief Base Cerebellar Motor Articulation Controller (CMAC) Class 
+ * A class for building and training the CMAC Neural Network
+ */
 class CMAC
 {
 private:
@@ -34,7 +58,10 @@ public:
     virtual std::vector<std::pair<float, float>> predict(std::vector<std::pair<float, float>> data, float lowerlimit, float upperlimit, float& accuracy, bool train) = 0;
 };
 
-// Derived Class DiscreteCMAC
+/**
+ * @brief Derived Discrete CMAC Class 
+ * A class for building and training the Discrete CMAC Neural Network
+ */
 class DiscreteCMAC : public CMAC
 {
 public:
@@ -45,7 +72,10 @@ public:
 };
 
 
-// Derived Class ContinousCMAC
+/**
+ * @brief Derived Continous CMAC Class 
+ * A class for building and training the Continous CMAC Neural Network
+ */
 class ContinousCMAC : public CMAC
 {
 public:
@@ -58,6 +88,12 @@ public:
 
 //-----------------------------------------------------------
 
+/**
+ * @brief Initialize the CMAC class
+ *
+ * @param gen_factor Generalization Factor of the algorithm
+ * @param num_weights Number of weights allowed
+ */
 CMAC::CMAC(int gen_factor, int num_weights) : wt_vector(num_weights, 1)
 {
     this->gen_factor = gen_factor;
@@ -65,42 +101,83 @@ CMAC::CMAC(int gen_factor, int num_weights) : wt_vector(num_weights, 1)
     this->associated_vec_size = num_weights + 1 - gen_factor;
 }
 
+/**
+ * @brief Setter to set Generalization Factor
+ * @param Generalization Factor
+ */
 void CMAC::setGenFactor(int gf)
 {
     gen_factor = gf;
 }
 
+/**
+ * @brief Getter to get Generalization Factor
+ * @return Generalization Factor
+ */
 int CMAC::getGenFactor()
 {
     return gen_factor;
 }
 
+/**
+ * @brief Getter to get Associated Vector size
+ * @return Associated Vector size
+ */
 int CMAC::getAssociatedVecSize()
 {
     return associated_vec_size;
 }
 
+/**
+ * @brief Getter to get Weight Vector
+ * @return Weight Vector
+ */
 std::vector<float> CMAC::getWtVector()
 {
     return wt_vector;
 }
 
+/**
+ * @brief Setter to set the Weight Vector
+ *
+ * @param start_index Start index associted with first activated weight for corresponding input
+ * @param correction Weight update value
+ */
 void CMAC::setWtVector(int start_index, float correction)
 {
     for (int i = start_index; i < start_index + gen_factor; i++)
         wt_vector[i] += correction;
 }
 
+/**
+ * @brief Getter to get Association Value given a key
+ *
+ * @param key Map key
+ * @return Map value
+ */
 int CMAC::getAssociationMapValue(float key)
 {
     return association_map[key];
 }
 
+/**
+ * @brief Setter to set Association Key and Values
+ *
+ * @param key Map key
+ * @param value Map value
+ */
 void CMAC::setAssociationMapValue(float key, int value)
 {
     association_map[key] = value;
 }
 
+/**
+ * @brief Function to calculte error between actual and predicted data 
+ *
+ * @param data Continer of the input and output data values
+ * @param predicted_data Continer of the input and output predicted data values
+ * @return Error Value
+ */
 float CMAC::calculateError(std::vector<std::pair<float, float>> data, std::vector<std::pair<float, float>> predicted_data)
 {
     int sum = 0; int n = data.size();
@@ -111,12 +188,11 @@ float CMAC::calculateError(std::vector<std::pair<float, float>> data, std::vecto
 }
 
 /**
- * Generate the Association Hash Map for keeping the track of weight activations.
+ * @brief Generate the Association Hash Map for keeping the track of weight activations.
  *
- * @param data Pair of input and output values
+ * @param data Continer of the input and output data values
  * @param lowerlimit Lowerlimit value for the data samples
  * @param upperlimit Uperlimit value for the data samples
- * @return Hash Map for mapping between input space and the weight vector start index for corresponding input
  */
 void CMAC::generateAssociationMap(std::vector<std::pair<float, float>> data, float lowerlimit, float upperlimit)
 {
@@ -132,8 +208,22 @@ void CMAC::generateAssociationMap(std::vector<std::pair<float, float>> data, flo
 }
 
 //----------------------------------------------------
+/**
+ * @brief Initialize the DiscreteCMAC class
+ *
+ * @param gen_factor Generalization Factor of the algorithm
+ * @param num_weights Number of weights allowed
+ */
 
 DiscreteCMAC::DiscreteCMAC(int gen_factor, int num_weights) : CMAC(gen_factor, num_weights) {};
+
+/**
+ * @brief Predict function for the Continous CMAC class
+ *
+ * @param data_element Pair of the input and output data value 
+ * @param gen_factor Generalization Factor of the algorithm
+ * @param lr Learning Rate for training
+ */
 
 void DiscreteCMAC::updateWeights(std::pair<float, float> data_element, int gen_factor, float lr)
 {
@@ -149,6 +239,16 @@ void DiscreteCMAC::updateWeights(std::pair<float, float> data_element, int gen_f
     setWtVector(start_index, correction);
 }
 
+/**
+ * @brief Train function for the Discrete CMAC class
+ *
+ * @param data Continer of the input and output train data for training 
+ * @param lowerlimit Lowerlimit value for the data samples
+ * @param upperlimit Uperlimit value for the data samples
+ * @param epochs Number of times we want to iterate on the full dataset
+ * @param lr Learning Rate for training
+ * @param convergenceThreshold Predefined threshold for convergence criteria of CMAC
+ */
 
 void DiscreteCMAC::train(std::vector<std::pair<float, float>> data, float lowerlimit, float upperlimit, int epochs, float lr, float convergenceThreshold)
 {
@@ -179,6 +279,17 @@ void DiscreteCMAC::train(std::vector<std::pair<float, float>> data, float lowerl
     }
 }
 
+/**
+ * @brief Predict function for the Discrete CMAC class
+ *
+ * @param data Continer of the input and output test data for prediction 
+ * @param lowerlimit Lowerlimit value for the data samples
+ * @param upperlimit Uperlimit value for the data samples
+ * @param accuracy Current accuracy of the network
+ * @param train Boolean to tell the function to operate in train mode or inference mode
+ * @return Contianer of predicted data (having both input and output values) 
+ */
+
 std::vector<std::pair<float, float>> DiscreteCMAC::predict(std::vector<std::pair<float, float>> data, float lowerlimit, float upperlimit, float& accuracy, bool train = false)
 {
     std::vector<std::pair<float, float>> predicted_data;
@@ -203,7 +314,22 @@ std::vector<std::pair<float, float>> DiscreteCMAC::predict(std::vector<std::pair
 
 //-------------------------------------------
 
+/**
+ * @brief Initialize the ContinousCMAC class
+ *
+ * @param gen_factor Generalization Factor of the algorithm
+ * @param num_weights Number of weights allowed
+ */
 ContinousCMAC::ContinousCMAC(int gen_factor, int num_weights) : CMAC(gen_factor, num_weights) {};
+
+/**
+ * @brief Generate a vector of equally space elements between lowelimit and upperlimit
+ *
+ * @param associated_vec_size Number of elements required in the container
+ * @param lowerlimit Lowerlimit value for the data samples
+ * @param upperlimit Uperlimit value for the data samples
+ * @return Continer contining the equally spaced elements
+ */
 
 std::vector<float> ContinousCMAC::generateInputVector(int associated_vec_size, float lowerlimit, float upperlimit)
 {
@@ -215,6 +341,13 @@ std::vector<float> ContinousCMAC::generateInputVector(int associated_vec_size, f
     return input;
 }
 
+/**
+ * @brief Predict function for the Continous CMAC class
+ *
+ * @param data_element Pair of the input and output data value 
+ * @param gen_factor Generalization Factor of the algorithm
+ * @param lr Learning Rate for training
+ */
 void ContinousCMAC::updateWeights(std::pair<float, float> data_element, std::vector<float> input, int gen_factor, float lr)
 {
 
@@ -250,6 +383,17 @@ void ContinousCMAC::updateWeights(std::pair<float, float> data_element, std::vec
     setWtVector(next_index, correction);
 }
 
+/**
+ * @brief Train function for the Continous CMAC class
+ *
+ * @param data Continer of the input and output train data for training 
+ * @param lowerlimit Lowerlimit value for the data samples
+ * @param upperlimit Uperlimit value for the data samples
+ * @param epochs Number of times we want to iterate on the full dataset
+ * @param lr Learning Rate for training
+ * @param convergenceThreshold Predefined threshold for convergence criteria of CMAC
+ */
+
 void ContinousCMAC::train(std::vector<std::pair<float, float>> data, float lowerlimit, float upperlimit, int epochs, float lr, float convergenceThreshold)
 {
     generateAssociationMap(data, lowerlimit, upperlimit);
@@ -282,6 +426,17 @@ void ContinousCMAC::train(std::vector<std::pair<float, float>> data, float lower
         std::cout << "ContinousCMAC Training in Progress: " << " Epoch: " << epoch << " Accuracy: " << accuracy*100 << " Error: " << curr_loss << std::endl;
     }
 }
+
+/**
+ * @brief Predict function for the Continous CMAC class
+ *
+ * @param data Continer of the input and output test data for prediction 
+ * @param lowerlimit Lowerlimit value for the data samples
+ * @param upperlimit Uperlimit value for the data samples
+ * @param accuracy Current accuracy of the network
+ * @param train Boolean to tell the function to operate in train mode or inference mode
+ * @return Contianer of predicted data (having both input and output values) 
+ */
 
 std::vector<std::pair<float, float>> ContinousCMAC::predict(std::vector<std::pair<float, float>> data, float lowerlimit, float upperlimit, float& accuracy, bool train = false)
 {
